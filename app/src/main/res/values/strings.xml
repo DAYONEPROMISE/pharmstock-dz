@@ -41,7 +41,7 @@
     <string name="status_ok">J-%1$d</string>
     <string name="language_title">Langue / اللغة</string>
     <string name="alerts_title">Alertes locales</string>
-    <string name="alerts_body">Chaque jour, l’application vérifie les dates d’expiration sur l’appareil et affiche une notification si des lots sont expirés ou expirent dans moins de 30 jours. 100 % hors-ligne, aucun compte.</string>
+    <string name="alerts_body">Chaque jour, l’application vérifie les dates d’expiration sur l’appareil et affiche une notification si des lots sont expirés ou expirent dans moins de 30 jours. 100 %% hors-ligne, aucun compte.</string>
     <string name="about_title">À propos</string>
     <string name="about_body">PharmStockDZ 1.0.0 — suivi des lots et des expirations pour pharmacies algériennes. Données stockées uniquement sur l’appareil. Ceci n’est pas un outil de vente : aucune caisse, aucune facture.</string>
     <string name="notif_channel_name">Alertes d’expiration</string>
