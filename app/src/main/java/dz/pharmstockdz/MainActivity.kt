@@ -1,0 +1,32 @@
+package dz.pharmstockdz
+
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
+import dz.pharmstockdz.ui.AppNav
+import dz.pharmstockdz.ui.theme.PharmStockDZTheme
+
+class MainActivity : ComponentActivity() {
+    private val permissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        if (Build.VERSION.SDK_INT >= 33 &&
+            ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) !=
+            PackageManager.PERMISSION_GRANTED
+        ) {
+            permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+        }
+        setContent {
+            PharmStockDZTheme {
+                AppNav()
+            }
+        }
+    }
+}
