@@ -18,9 +18,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dz.pharmstockdz.R
@@ -48,7 +50,7 @@ fun StockScreen(vm: StockViewModel, onOpenProduct: (Long) -> Unit, onAddProduct:
                                 .filter { it.isNotBlank() }.joinToString(" · ")
                             if (sub.isNotBlank()) Text(sub)
                         },
-                        modifier = Modifier.clickable { onOpenProduct(product.id) }
+                        modifier = Modifier.clickable(role = Role.Button) { onOpenProduct(product.id) }
                     )
                 }
             }
@@ -58,15 +60,15 @@ fun StockScreen(vm: StockViewModel, onOpenProduct: (Long) -> Unit, onAddProduct:
 
 @Composable
 private fun SearchField(vm: StockViewModel) {
-    var text = remember { mutableStateOf("") }
+    var text by rememberSaveable { mutableStateOf("") }
     OutlinedTextField(
-        value = text.value,
+        value = text,
         onValueChange = {
-            text.value = it
+            text = it
             vm.setQuery(it)
         },
         label = { Text(stringResource(R.string.search_hint)) },
-        modifier = Modifier.fillMaxWidth().padding(12.dp),
+        modifier = Modifier.fillMaxWidth().padding(16.dp),
         singleLine = true
     )
 }

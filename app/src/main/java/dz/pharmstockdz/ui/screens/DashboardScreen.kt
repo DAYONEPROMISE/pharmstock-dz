@@ -1,6 +1,7 @@
 package dz.pharmstockdz.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -36,26 +37,34 @@ fun DashboardScreen(vm: StockViewModel, onOpenProduct: (Long) -> Unit) {
 
     LazyColumn(Modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(4.dp)) {
         item {
-            Row(
-                Modifier.fillMaxWidth().padding(12.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                StatCard(stringResource(R.string.stat_products), stats.productCount.toString(), Modifier.weight(1f))
-                StatCard(stringResource(R.string.stat_expired), stats.expiredLots.toString(), Modifier.weight(1f))
-            }
-            Row(
-                Modifier.fillMaxWidth().padding(horizontal = 12.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                StatCard(stringResource(R.string.stat_critical), stats.criticalLots.toString(), Modifier.weight(1f))
-                StatCard(stringResource(R.string.stat_warning), stats.warningLots.toString(), Modifier.weight(1f))
+            // DZ-2026 adaptive: one row of 4 stats on ≥600dp width, two rows below.
+            BoxWithConstraints(Modifier.fillMaxWidth().padding(16.dp)) {
+                if (maxWidth >= 600.dp) {
+                    Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                        StatCard(stringResource(R.string.stat_products), stats.productCount.toString(), Modifier.weight(1f))
+                        StatCard(stringResource(R.string.stat_expired), stats.expiredLots.toString(), Modifier.weight(1f))
+                        StatCard(stringResource(R.string.stat_critical), stats.criticalLots.toString(), Modifier.weight(1f))
+                        StatCard(stringResource(R.string.stat_warning), stats.warningLots.toString(), Modifier.weight(1f))
+                    }
+                } else {
+                    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                            StatCard(stringResource(R.string.stat_products), stats.productCount.toString(), Modifier.weight(1f))
+                            StatCard(stringResource(R.string.stat_expired), stats.expiredLots.toString(), Modifier.weight(1f))
+                        }
+                        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                            StatCard(stringResource(R.string.stat_critical), stats.criticalLots.toString(), Modifier.weight(1f))
+                            StatCard(stringResource(R.string.stat_warning), stats.warningLots.toString(), Modifier.weight(1f))
+                        }
+                    }
+                }
             }
         }
         item {
             Text(
                 stringResource(R.string.attention_needed, attention.size),
                 style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.padding(12.dp)
+                modifier = Modifier.padding(16.dp)
             )
         }
         items(attention, key = { it.lot.id }) { entry ->

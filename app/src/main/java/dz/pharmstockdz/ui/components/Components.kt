@@ -6,10 +6,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.AssistChip
-import androidx.compose.material3.AssistChipDefaults
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -29,26 +29,30 @@ fun StatusChip(status: ExpiryStatus, days: Long) {
         ExpiryStatus.WARNING -> stringResource(R.string.status_warning, days)
         ExpiryStatus.OK -> stringResource(R.string.status_ok, days)
     }
-    val colors = when (status) {
-        ExpiryStatus.EXPIRED -> AssistChipDefaults.assistChipColors(
-            containerColor = MaterialTheme.colorScheme.errorContainer
-        )
-        ExpiryStatus.CRITICAL -> AssistChipDefaults.assistChipColors(
-            containerColor = MaterialTheme.colorScheme.tertiaryContainer
-        )
-        else -> AssistChipDefaults.assistChipColors()
+    // Non-clickable badge (not a button): status is text, never color alone.
+    val container = when (status) {
+        ExpiryStatus.EXPIRED -> MaterialTheme.colorScheme.errorContainer
+        ExpiryStatus.CRITICAL -> MaterialTheme.colorScheme.tertiaryContainer
+        else -> MaterialTheme.colorScheme.surfaceVariant
     }
-    AssistChip(onClick = {}, label = { Text(label) }, colors = colors)
+    val content = when (status) {
+        ExpiryStatus.EXPIRED -> MaterialTheme.colorScheme.onErrorContainer
+        ExpiryStatus.CRITICAL -> MaterialTheme.colorScheme.onTertiaryContainer
+        else -> MaterialTheme.colorScheme.onSurfaceVariant
+    }
+    Surface(color = container, contentColor = content, shape = RoundedCornerShape(8.dp)) {
+        Text(label, style = MaterialTheme.typography.labelLarge, modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp))
+    }
 }
 
 @Composable
 fun LotCard(entry: LotWithProduct, showProductName: Boolean = false, onClick: (() -> Unit)? = null) {
     val info = classifyExpiry(epochDayToLocalDate(entry.lot.expiryEpochDay))
-    Card(
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 4.dp),
-        onClick = onClick ?: {}
-    ) {
-        Column(Modifier.padding(12.dp)) {
+    // Clickable only when an action exists; otherwise a plain card (TalkBack honest).
+    val cardModifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp)
+    @Composable
+    fun body() {
+        Column(Modifier.padding(16.dp)) {
             if (showProductName) {
                 Text(entry.product.name, style = MaterialTheme.typography.titleMedium)
             }
@@ -76,5 +80,10 @@ fun LotCard(entry: LotWithProduct, showProductName: Boolean = false, onClick: ((
                 )
             }
         }
+    }
+    if (onClick != null) {
+        Card(modifier = cardModifier, onClick = onClick) { body() }
+    } else {
+        Card(modifier = cardModifier) { body() }
     }
 }
