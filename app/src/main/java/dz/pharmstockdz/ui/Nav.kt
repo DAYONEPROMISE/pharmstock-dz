@@ -80,19 +80,19 @@ fun AppNav() {
                 NavigationBarItem(
                     selected = route == Routes.DASHBOARD,
                     onClick = { nav.navigate(Routes.DASHBOARD) { popUpTo(Routes.DASHBOARD) } },
-                    icon = { Icon(Icons.Filled.Home, contentDescription = null) },
+                    icon = { Icon(Icons.Filled.Home, contentDescription = stringResource(R.string.nav_dashboard)) },
                     label = { Text(stringResource(R.string.nav_dashboard)) }
                 )
                 NavigationBarItem(
                     selected = route == Routes.STOCK,
                     onClick = { nav.navigate(Routes.STOCK) { popUpTo(Routes.DASHBOARD) } },
-                    icon = { Icon(Icons.AutoMirrored.Filled.List, contentDescription = null) },
+                    icon = { Icon(Icons.AutoMirrored.Filled.List, contentDescription = stringResource(R.string.nav_stock)) },
                     label = { Text(stringResource(R.string.nav_stock)) }
                 )
                 NavigationBarItem(
                     selected = route == Routes.SETTINGS,
                     onClick = { nav.navigate(Routes.SETTINGS) { popUpTo(Routes.DASHBOARD) } },
-                    icon = { Icon(Icons.Filled.Settings, contentDescription = null) },
+                    icon = { Icon(Icons.Filled.Settings, contentDescription = stringResource(R.string.nav_settings)) },
                     label = { Text(stringResource(R.string.nav_settings)) }
                 )
             }
