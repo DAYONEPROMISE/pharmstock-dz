@@ -23,8 +23,10 @@
 | # | Test | Type | Result |
 |---|------|------|--------|
 | 1 | assembleDebug local | build | PASS (BUILD SUCCESSFUL, APK 19.7 MB) |
-| 2–11 | ExpiryStatusTest (10 tests: boundaries 0/30/31/90/91d, expired, custom thresholds, round-trip, leap day) | unit (JVM run pending; logic cross-checked w/ independent port) | LOGIC PASS, JVM PENDING |
-| 12 | CI workflow (test+lint+assemble) | cloud | PENDING (no repo yet) |
+| 2–11 | ExpiryStatusTest (10 tests: boundaries 0/30/31/90/91d, expired, custom thresholds, round-trip, leap day) | unit (JVM, GitHub Actions run #3 step + run #4) | PASS |
+| 12 | lintDebug (incl. StringFormatInvalid fix on alerts_body) | lint (GitHub Actions run #4) | PASS |
+| 13 | CI Android CI run #4 (tests + lint + assembleDebug + APK artifact) | cloud | PASS (success, 2026-10-10) |
+| 14 | APK artifact pharmstockdz-debug-apk (18.3 MB, expires 2026-11-09) | cloud artifact | PUBLISHED |
 
 ## LIMITATIONS
 - GitHub repo creation via API returns 403; push + cloud build + APK artifact blocked until repo exists.
